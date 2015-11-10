@@ -6,8 +6,8 @@ COPY MariaDB.repo /etc/yum.repos.d/MariaDB.repo
 RUN groupadd -r mysql && useradd -r -g mysql mysql
 
 RUN rpm --import https://yum.mariadb.org/RPM-GPG-KEY-MariaDB \
-    yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm \
-    yum install -y MariaDB-server MariaDB-client galera percona-xtrabackup.x86_64 
+    && yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm \
+    && yum install -y MariaDB-server MariaDB-client galera percona-xtrabackup.x86_64 
     
 VOLUME /var/lib/mysql /etc/my.cnf.d/
 
