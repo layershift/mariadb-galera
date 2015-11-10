@@ -11,17 +11,18 @@ innodb_flush_log_at_trx_commit=2
 [galera]
 # Galera Provider Configuration
 wsrep_provider=/usr/lib/galera/libgalera_smm.so
-wsrep_provider_options="gcs.fc_limit = 128;  evs.keepalive_period = PT3S;  evs.inactive_check_period = PT10S; evs.suspect_timeout = PT30S; evs.inactive_timeout = PT1M; evs.install_timeout= PT1M;gcache.size=5G" 
+wsrep_provider_options="gcs.fc_limit = 128; evs.keepalive_period = PT3S;evs.inactive_check_period = PT10S; evs.suspect_timeout = PT30S; evs.inactive_timeout = PT1M; evs.install_timeout= PT1M;gcache.size=2G" 
 
 # Galera Cluster Configuration
 wsrep_cluster_name="galera_cluster" 
-wsrep_cluster_address="gcomm://node1_ip,node2_ip,node3_ip" 
+wsrep_cluster_address="gcomm://NODE1,NODE2,NODE3" 
 
 # Galera Synchronization Congifuration
-wsrep_sst_method=mysqldump
+wsrep_sst_method=xtrabackup
+wsrep_sst_auth=root:PASSWORD
 
 # Galera Node Configuration
-wsrep_node_address="this_node_ip" 
-wsrep_node_name="this_node_name" 
+wsrep_node_address="THISNODE"
+wsrep_node_name="THISNAME" 
 
 wsrep_slave_threads=16
