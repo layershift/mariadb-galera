@@ -1,0 +1,17 @@
+[galera]
+# Galera Provider Configuration
+wsrep_provider=/usr/lib/galera/libgalera_smm.so
+wsrep_provider_options="gcs.fc_limit = 128;  evs.keepalive_period = PT3S;  evs.inactive_check_period = PT10S; evs.suspect_timeout = PT30S; evs.inactive_timeout = PT1M; evs.install_timeout= PT1M;gcache.size=5G" 
+
+# Galera Cluster Configuration
+wsrep_cluster_name="galera_cluster" 
+wsrep_cluster_address="gcomm://node1_ip,node2_ip,node3_ip" 
+
+# Galera Synchronization Congifuration
+wsrep_sst_method=mysqldump
+
+# Galera Node Configuration
+wsrep_node_address="this_node_ip" 
+wsrep_node_name="this_node_name" 
+
+wsrep_slave_threads=16
