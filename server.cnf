@@ -1,0 +1,41 @@
+[mysqld]
+## General
+user=mysql
+datadir=/var/lib/mysql
+#
+### InnoDB configuration
+innodb_buffer_pool_size=1G
+innodb_log_file_size=64M
+innodb_flush_method=O_DIRECT
+innodb_locks_unsafe_for_binlog
+innodb_autoinc_lock_mode=2
+innodb_file_per_table
+log-error = /var/log/mysql.error
+query_cache_size=0
+binlog_format=ROW
+default-storage-engine=innodb
+innodb_autoinc_lock_mode=2
+query_cache_type=0
+bind-address=0.0.0.0
+innodb_file_per_table
+innodb_flush_log_at_trx_commit=2
+
+[galera]
+# Galera Provider Configuration
+#wsrep_ready=ON
+wsrep_provider=/usr/lib64/galera/libgalera_smm.so
+wsrep_provider_options="gcs.fc_limit = 128; evs.keepalive_period = PT3S;evs.inactive_check_period = PT10S; evs.suspect_timeout = PT30S; evs.inactive_timeout = PT1M; evs.install_timeout= PT1M;gcache.size=2G" 
+
+# Galera Cluster Configuration
+wsrep_cluster_name="galera_cluster" 
+wsrep_cluster_address="gcomm://NODE1,NODE2,NODE3" 
+
+# Galera Synchronization Congifuration
+wsrep_sst_method=xtrabackup
+wsrep_sst_auth=root:PASSWORD
+
+# Galera Node Configuration
+wsrep_node_address="THISNODE"
+wsrep_node_name="THISNAME" 
+
+wsrep_slave_threads=16
