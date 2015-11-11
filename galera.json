@@ -17,7 +17,7 @@
                 }, {
                     "type": "string",
                     "name": "galera_pwd",
-                    "caption": "Replication user password",
+                    "caption": "Replication pass",
                     "default": "replicationP455w0rD",
                     "required": true
                 }
