@@ -51,6 +51,7 @@
         },
         "onInstall": {
             "call": [
+                    "preconfigureMariaDB",
                     "configureMariaDB",
                     "configureNodes",
                     "startNode0",
@@ -60,7 +61,7 @@
             ]
         },
         "procedures": [{
-                "id": "configureMariaDB",
+                "id": "preconfigureMariaDB",
                 "onCall": [{
                         "executeShellCommands": [{
                                 "nodeMission": "sqldb",
@@ -69,8 +70,22 @@
                                         "iptables -I INPUT 5 -p tcp -m tcp -m multiport --dports 4567,4444 -s ${nodes.sqldb[0].address},${nodes.sqldb[1].address},${nodes.sqldb[2].address} -j ACCEPT",
                                         "iptables-save > /etc/sysconfig/iptables",
                                         "systemctl enable iptables.service 2>&1",
+                                        "sed -i \"s/NODE1,NODE2,NODE3/${nodes.sqldb[0].address}:4567,${nodes.sqldb[1].address}:4567,${nodes.sqldb[2].address}:4567/g\" /etc/my.cnf.d/server.cnf",
+                                        "sed -i \"s/PASSWORD/${settings.galera_pwd}/g\" /etc/my.cnf.d/server.cnf",
+                                        "sed -i \"s/#wsrep/wsrep/g\" /etc/my.cnf.d/server.cnf"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }, {
+                "id": "configureMariaDB",
+                "onCall": [{
+                        "executeShellCommands": [{
+                                "nodeId": "${nodes.sqldb[0].id}",
+                                "user": "root",
+                                "commands": [
                                         "service mysql start 2>&1",
-                                        "wget -q -O /tmp/user.sql https://jps.bartbania.com/galera/user.sql 2>&1",
                                         "/usr/bin/mysqladmin -u root password \"${settings.root_pwd}\"",
                                         "sed -i \"s/NODE1/${nodes.sqldb[0].address}/g\" /tmp/user.sql",
                                         "sed -i \"s/NODE2/${nodes.sqldb[1].address}/g\" /tmp/user.sql",
@@ -78,9 +93,32 @@
                                         "sed -i \"s/GOESHERE/${settings.galera_pwd}/g\" /tmp/user.sql",
                                         "mysql -u root -p \"${settings.root_pwd}\" < /tmp/user.sql",
                                         "service mysql stop 2>&1",
-                                        "sed -i \"s/NODE1,NODE2,NODE3/${nodes.sqldb[0].address}:4567,${nodes.sqldb[1].address}:4567,${nodes.sqldb[2].address}:4567/g\" /etc/my.cnf.d/server.cnf",
-                                        "sed -i \"s/PASSWORD/${settings.galera_pwd}/g\" /etc/my.cnf.d/server.cnf",
-                                        "sed -i \"s/#wsrep/wsrep/g\" /etc/my.cnf.d/server.cnf"
+                                ]
+                            }, {
+                                "nodeId": "${nodes.sqldb[1].id}",
+                                "user": "root",
+                                "commands": [
+                                        "service mysql start 2>&1",
+                                        "/usr/bin/mysqladmin -u root password \"${settings.root_pwd}\"",
+                                        "sed -i \"s/NODE1/${nodes.sqldb[0].address}/g\" /tmp/user.sql",
+                                        "sed -i \"s/NODE2/${nodes.sqldb[1].address}/g\" /tmp/user.sql",
+                                        "sed -i \"s/NODE3/${nodes.sqldb[2].address}/g\" /tmp/user.sql",
+                                        "sed -i \"s/GOESHERE/${settings.galera_pwd}/g\" /tmp/user.sql",
+                                        "mysql -u root -p \"${settings.root_pwd}\" < /tmp/user.sql",
+                                        "service mysql stop 2>&1",
+                                ]
+                            }, {
+                                "nodeId": "${nodes.sqldb[2].id}",
+                                "user": "root",
+                                "commands": [
+                                        "service mysql start 2>&1",
+                                        "/usr/bin/mysqladmin -u root password \"${settings.root_pwd}\"",
+                                        "sed -i \"s/NODE1/${nodes.sqldb[0].address}/g\" /tmp/user.sql",
+                                        "sed -i \"s/NODE2/${nodes.sqldb[1].address}/g\" /tmp/user.sql",
+                                        "sed -i \"s/NODE3/${nodes.sqldb[2].address}/g\" /tmp/user.sql",
+                                        "sed -i \"s/GOESHERE/${settings.galera_pwd}/g\" /tmp/user.sql",
+                                        "mysql -u root -p \"${settings.root_pwd}\" < /tmp/user.sql",
+                                        "service mysql stop 2>&1",
                                 ]
                             }
                         ]
