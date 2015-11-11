@@ -17,6 +17,7 @@ VOLUME /var/lib/mysql /etc/my.cnf.d/
 
 COPY server.cnf /etc/my.cnf.d/server.cnf
 COPY iptables /etc/sysconfig/iptables
+COPY user.sql /tmp/user.sql
 COPY docker-entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
