@@ -31,7 +31,7 @@ innodb_flush_log_at_trx_commit=2
 
 # Galera Synchronization Congifuration
 #wsrep_sst_method=xtrabackup
-#wsrep_sst_auth=root:PASSWORD
+#wsrep_sst_auth=galerareplicator:PASSWORD
 
 # Galera Node Configuration
 #wsrep_node_address="THISNODE"
