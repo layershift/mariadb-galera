@@ -17,4 +17,4 @@ The automated script will create a MariaDB Galera Cluster consisting of three me
 Additional information
 ======
 
-[jelastic@layershift.com]jelastic@layershift.com
+jelastic@layershift.com
