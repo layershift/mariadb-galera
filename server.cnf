@@ -21,7 +21,8 @@ innodb_flush_method=O_DIRECT
 innodb_locks_unsafe_for_binlog
 innodb_autoinc_lock_mode=2
 innodb_file_per_table
-log-error = /var/log/mysql.error
+log-error = /var/log/mysql.log
+
 query_cache_size=0
 binlog_format=ROW
 default-storage-engine=innodb
@@ -34,14 +35,14 @@ innodb_flush_log_at_trx_commit=2
 [galera]
 # Galera Provider Configuration
 #wsrep_provider=/usr/lib64/galera/libgalera_smm.so
-#wsrep_provider_options="gcs.fc_limit = 128; evs.keepalive_period = PT3S;evs.inactive_check_period = PT10S; evs.suspect_timeout = PT30S; evs.inactive_timeout = PT1M; evs.install_timeout= PT1M;gcache.size=2G"
+#wsrep_provider_options="gcs.fc_limit = 128; evs.keepalive_period = PT3S;evs.inactive_check_period = PT10S; evs.suspect_timeout = PT30S; evs.inactive_timeout = PT1M; evs.install_timeout= PT1M;gcache.size=4G"
 
 # Galera Cluster Configuration
 #wsrep_cluster_name="galera_cluster"
 #wsrep_cluster_address="gcomm://NODE1,NODE2,NODE3"
 
 # Galera Synchronization Congifuration
-#wsrep_sst_method=xtrabackup
+#wsrep_sst_method=xtrabackup-v2
 #wsrep_sst_auth=galerareplicator:PASSWORD
 
 # Galera Node Configuration

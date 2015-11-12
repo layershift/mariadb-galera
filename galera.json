@@ -52,7 +52,6 @@
         "onInstall": {
             "call": [
                     "preconfigureMariaDB",
-                    "configureMariaDB",
                     "configureNodes",
                     "startNode0",
                     "startNode1",
@@ -70,55 +69,16 @@
                                         "iptables -I INPUT 5 -p tcp -m tcp -m multiport --dports 4567,4444 -s ${nodes.sqldb[0].address},${nodes.sqldb[1].address},${nodes.sqldb[2].address} -j ACCEPT",
                                         "iptables-save > /etc/sysconfig/iptables",
                                         "systemctl enable iptables.service 2>&1",
+                                        "service mysql start 2>&1",
+                                        "/usr/bin/mysqladmin -u root password \"${settings.root_pwd}\"",
+                                        "sed -i \"s/NODE1/${nodes.sqldb[0].address}/g\" /tmp/user.sql",
+                                        "sed -i \"s/NODE2/${nodes.sqldb[1].address}/g\" /tmp/user.sql",
+                                        "sed -i \"s/NODE3/${nodes.sqldb[2].address}/g\" /tmp/user.sql",
+                                        "sed -i \"s/GOESHERE/${settings.galera_pwd}/g\" /tmp/user.sql",
+                                        "mysql -uroot -p\"${settings.root_pwd}\" < /tmp/user.sql",
+                                        "service mysql stop 2>&1",
                                         "sed -i \"s/NODE1,NODE2,NODE3/${nodes.sqldb[0].address}:4567,${nodes.sqldb[1].address}:4567,${nodes.sqldb[2].address}:4567/g\" /etc/my.cnf.d/server.cnf",
-                                        "sed -i \"s/PASSWORD/${settings.galera_pwd}/g\" /etc/my.cnf.d/server.cnf",
-                                        "sed -i \"s/#wsrep/wsrep/g\" /etc/my.cnf.d/server.cnf"
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }, {
-                "id": "configureMariaDB",
-                "onCall": [{
-                        "executeShellCommands": [{
-                                "nodeId": "${nodes.sqldb[0].id}",
-                                "user": "root",
-                                "commands": [
-                                        "service mysql start 2>&1",
-                                        "/usr/bin/mysqladmin -u root password \"${settings.root_pwd}\"",
-                                        "sed -i \"s/NODE1/${nodes.sqldb[0].address}/g\" /tmp/user.sql",
-                                        "sed -i \"s/NODE2/${nodes.sqldb[1].address}/g\" /tmp/user.sql",
-                                        "sed -i \"s/NODE3/${nodes.sqldb[2].address}/g\" /tmp/user.sql",
-                                        "sed -i \"s/GOESHERE/${settings.galera_pwd}/g\" /tmp/user.sql",
-                                        "mysql -u root -p \"${settings.root_pwd}\" < /tmp/user.sql",
-                                        "service mysql stop 2>&1",
-                                ]
-                            }, {
-                                "nodeId": "${nodes.sqldb[1].id}",
-                                "user": "root",
-                                "commands": [
-                                        "service mysql start 2>&1",
-                                        "/usr/bin/mysqladmin -u root password \"${settings.root_pwd}\"",
-                                        "sed -i \"s/NODE1/${nodes.sqldb[0].address}/g\" /tmp/user.sql",
-                                        "sed -i \"s/NODE2/${nodes.sqldb[1].address}/g\" /tmp/user.sql",
-                                        "sed -i \"s/NODE3/${nodes.sqldb[2].address}/g\" /tmp/user.sql",
-                                        "sed -i \"s/GOESHERE/${settings.galera_pwd}/g\" /tmp/user.sql",
-                                        "mysql -u root -p \"${settings.root_pwd}\" < /tmp/user.sql",
-                                        "service mysql stop 2>&1",
-                                ]
-                            }, {
-                                "nodeId": "${nodes.sqldb[2].id}",
-                                "user": "root",
-                                "commands": [
-                                        "service mysql start 2>&1",
-                                        "/usr/bin/mysqladmin -u root password \"${settings.root_pwd}\"",
-                                        "sed -i \"s/NODE1/${nodes.sqldb[0].address}/g\" /tmp/user.sql",
-                                        "sed -i \"s/NODE2/${nodes.sqldb[1].address}/g\" /tmp/user.sql",
-                                        "sed -i \"s/NODE3/${nodes.sqldb[2].address}/g\" /tmp/user.sql",
-                                        "sed -i \"s/GOESHERE/${settings.galera_pwd}/g\" /tmp/user.sql",
-                                        "mysql -u root -p \"${settings.root_pwd}\" < /tmp/user.sql",
-                                        "service mysql stop 2>&1",
+                                        "sed -i \"s/PASSWORD/${settings.galera_pwd}/g\" /etc/my.cnf.d/server.cnf"
                                 ]
                             }
                         ]
@@ -132,21 +92,24 @@
                                 "user": "root",
                                 "commands": [
                                         "sed -i \"s/THISNODE/${nodes.sqldb[0].address}/g\" /etc/my.cnf.d/server.cnf",
-                                        "sed -i \"s/THISNAME/galera-node-${nodes.sqldb[0].id}/g\" /etc/my.cnf.d/server.cnf"
+                                        "sed -i \"s/THISNAME/galera-node-${nodes.sqldb[0].id}/g\" /etc/my.cnf.d/server.cnf",
+                                        "sed -i \"s/#wsrep/wsrep/g\" /etc/my.cnf.d/server.cnf"
                                 ]
                             }, {
                                 "nodeId": "${nodes.sqldb[1].id}",
                                 "user": "root",
                                 "commands": [
                                         "sed -i \"s/THISNODE/${nodes.sqldb[1].address}/g\" /etc/my.cnf.d/server.cnf",
-                                        "sed -i \"s/THISNAME/galera-node-${nodes.sqldb[1].id}/g\" /etc/my.cnf.d/server.cnf"
+                                        "sed -i \"s/THISNAME/galera-node-${nodes.sqldb[1].id}/g\" /etc/my.cnf.d/server.cnf",
+                                        "sed -i \"s/#wsrep/wsrep/g\" /etc/my.cnf.d/server.cnf"
                                 ]
                             }, {
                                 "nodeId": "${nodes.sqldb[2].id}",
                                 "user": "root",
                                 "commands": [
                                         "sed -i \"s/THISNODE/${nodes.sqldb[2].address}/g\" /etc/my.cnf.d/server.cnf",
-                                        "sed -i \"s/THISNAME/galera-node-${nodes.sqldb[2].id}/g\" /etc/my.cnf.d/server.cnf"
+                                        "sed -i \"s/THISNAME/galera-node-${nodes.sqldb[2].id}/g\" /etc/my.cnf.d/server.cnf",
+                                        "sed -i \"s/#wsrep/wsrep/g\" /etc/my.cnf.d/server.cnf"
                                 ]
                             }
                         ]
@@ -202,7 +165,8 @@
             }
         ],
         "success": {
-            "text": "Done."
+            "text": "Your MariaDB Galera Cluster has been deployed.<br />You can access the docker containers from our SSH Gateway <a href=\"http://kb.layershift.com/jelastic-ssh-access\" target=\"_blank\">http://kb.layershift.com/jelastic-ssh-access</a>. <br />Root password and connection details have been emailed to you.<br />More about MariaDB Galera cluster: <a href=\"https://mariadb.com/kb/en/mariadb/what-is-mariadb-galera-cluster/\" target=\"_blank\">https://mariadb.com/kb/en/mariadb/what-is-mariadb-galera-cluster/</a>.<br /><br />Docker on Jelastic:  <a href=\"https://jelastic.com/docker/ target=\"_blank\">https://jelastic.com/docker/</a>.",
+            "email": "Your MariaDB Galera Cluster has been deployed.<br />You can access the docker containers from our SSH Gateway <a href=\"http://kb.layershift.com/jelastic-ssh-access\" target=\"_blank\">http://kb.layershift.com/jelastic-ssh-access</a>. Details:<br /><ul><li>MySQL root password is: ${settings.root_pwd}</li><li>Replication user password: ${settings.galera_pwd}</li></ul>You can connect to MariaDB Galera Cluster containers from your application on:<br /><ul><li>Node 1: ${nodes.sqldb[0].address}</li><li>Node 2: ${nodes.sqldb[1].address}</li><li>Node 3: ${nodes.sqldb[2].address}</li></ul>.<br /><br />More about MariaDB Galera cluster: <a href=\"https://mariadb.com/kb/en/mariadb/what-is-mariadb-galera-cluster/\" target=\"_blank\">https://mariadb.com/kb/en/mariadb/what-is-mariadb-galera-cluster/</a>. <br /><br />Docker on Jelastic:  <a href=\"https://jelastic.com/docker/ target=\"_blank\">https://jelastic.com/docker/</a>."
         }
     }
 }
