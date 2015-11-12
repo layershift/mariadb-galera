@@ -3,6 +3,7 @@
     "application": {
         "name": "MariaDB Galera Cluster (Docker)",
         "id": "mariadb-galera",
+        "logo": "http://jps.layershift.com/mariadbgalera/mariadb.png",
         "homepage": "https://mariadb.com/",
         "type": "docker",
         "version": "10.0",
