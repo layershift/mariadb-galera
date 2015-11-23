@@ -72,7 +72,7 @@ elif [[ $mysql_status == "ERROR!" ]]; then
   else
     echo "Latest error: $error" > $EMAILMESSAGE
     /bin/mail -s "$SUBJECT3" "$EMAIL" < $EMAILMESSAGE
-    echo "sent" > $DDOWN_FILE
+    echo "sent" > $DOWN_FILE
   fi
 fi
 
