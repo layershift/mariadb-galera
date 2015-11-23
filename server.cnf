@@ -13,6 +13,7 @@ read_rnd_buffer_size = 256K
 net_buffer_length = 2K
 thread_stack = 240K
 skip-name-resolve
+log-error=/var/log/mysql.log
 
 ## InnoDB configuration
 innodb_buffer_pool_size=1G
@@ -21,7 +22,6 @@ innodb_flush_method=O_DIRECT
 innodb_locks_unsafe_for_binlog
 innodb_autoinc_lock_mode=2
 innodb_file_per_table
-log-error = /var/log/mysql.log
 
 query_cache_size=0
 binlog_format=ROW

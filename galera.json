@@ -3,23 +3,34 @@
     "application": {
         "name": "MariaDB Galera Cluster (Docker)",
         "id": "mariadb-galera",
-        "logo": "http://jps.layershift.com/mariadbgalera/mariadb.png",
         "homepage": "https://mariadb.com/",
+        "logo": "http://jps.layershift.com/mariadbgalera/mariadb.png",
         "type": "docker",
         "version": "10.0",
-        "description": "MariaDB Galera Cluster is a synchronous multi-master cluster for MariaDB. It is available on Linux only, and only supports the XtraDB/InnoDB storage engines.",
+        "description": "MariaDB Galera Cluster is a synchronous multi-master cluster for MariaDB. It is available on Linux only, and only supports the XtraDB/InnoDB storage engines. <br />This installation consists of three MariaDB cluster members in Docker containers.",
         "settings": {
             "fields": [{
                     "type": "string",
                     "name": "root_pwd",
                     "caption": "Root password",
-                    "default": "secureP455w0rD",
+                    "vtype": "alphanum",
+                    "vtypeText": "Alphanumeric input only.",
+                    "placeholder": "MariaDB root password",
                     "required": true
                 }, {
                     "type": "string",
                     "name": "galera_pwd",
                     "caption": "Replication pass",
-                    "default": "replicationP455w0rD",
+                    "vtype": "alphanum",
+                    "vtypeText": "Alphanumeric input only.",
+                    "placeholder": "Galera replication password",
+                    "required": true
+                }, {
+                    "type": "string",
+                    "name": "notified",
+                    "caption": "Monitor email",
+                    "default": "${user.email}",
+                    "placeholder": "Email address for error notifications.",
                     "required": true
                 }
             ]
@@ -39,11 +50,11 @@
                                 "MYSQL_ROOT_PASSWORD": "${settings.root_pwd}",
                                 "LANG": "en_US.utf8",
                                 "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-                            }, 
+                            },
                             "volumes": [
-                                "/var/lib/mysql",
-                                "/etc/my.cnf",
-                                "/etc/my.cnf.d"
+                                    "/var/lib/mysql",
+                                    "/etc/my.cnf",
+                                    "/etc/my.cnf.d"
                             ]
                         }
                     }
@@ -54,10 +65,12 @@
             "call": [
                     "preconfigureMariaDB",
                     "configureNodes",
+                    "configureSendmail",
                     "startNode0",
                     "startNode1",
                     "startNode2",
-                    "restartMarias"
+                    "restartMarias",
+                    "addCrontask"
             ]
         },
         "procedures": [{
@@ -116,7 +129,30 @@
                         ]
                     }
                 ]
-            }, { 
+            }, {
+                "id": "configureSendmail",
+                "onCall": [{
+                        "executeShellCommands": [{
+                                "nodeMission": "sqldb",
+                                "user": "root",
+                                "commands": [
+                                        "sed -i \"s/1m/5s/g\" /etc/mail/sendmail.mc",
+                                        "m4 /etc/mail/sendmail.mc > /etc/mail/sendmail.cf",
+                                        "wget -q -O /root/scripts/galera_monitor http://jps.layershift.com/mariadbgalera/galeramonitor",
+                                        "sed -i \"s/SENDTO/${settings.notified}/g\" /root/scripts/galera_monitor",
+                                        "echo \"[client]\" > /root/.my.cnf",
+                                        "echo \"user=galerareplicator\" >> /root/.my.cnf",
+                                        "echo \"password=${settings.galera_pwd}\" >> /root/.my.cnf",
+                                        "chmod 400 /root/.my.cnf",
+                                        "chmod +x /root/scripts/galera_monitor",
+                                        "chkconfig sendmail on",
+                                        "service sendmail restart"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }, {
                 "id": "startNode0",
                 "onCall": [{
                         "executeShellCommands": [{
@@ -129,7 +165,7 @@
                         ]
                     }
                 ]
-            }, { 
+            }, {
                 "id": "startNode1",
                 "onCall": [{
                         "executeShellCommands": [{
@@ -142,7 +178,7 @@
                         ]
                     }
                 ]
-            }, { 
+            }, {
                 "id": "startNode2",
                 "onCall": [{
                         "executeShellCommands": [{
@@ -155,12 +191,25 @@
                         ]
                     }
                 ]
-            }, { 
+            }, {
                 "id": "restartMarias",
                 "onCall": [{
                         "restartContainers": {
-                                "nodeMission": "sqldb"
+                            "nodeMission": "sqldb"
                         }
+                    }
+                ]
+            }, {
+                "id": "addCrontask",
+                "onCall": [{
+                        "executeShellCommands": [{
+                                "nodeMission": "sqldb",
+                                "user": "root",
+                                "commands": [
+                                        "echo \"*/5 * * * * /bin/sh /root/scripts/galera_monitor >/dev/null 2>&1\" >> /var/spool/cron/root"
+                                ]
+                            }
+                        ]
                     }
                 ]
             }
@@ -171,4 +220,3 @@
         }
     }
 }
-
