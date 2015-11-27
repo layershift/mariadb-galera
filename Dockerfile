@@ -17,8 +17,11 @@ RUN /sbin/chkconfig mysql on
 RUN /sbin/chkconfig sendmail on
 RUN mkdir /root/scripts
 
-VOLUME /var/lib/mysql /etc/my.cnf.d/ /root/ /var/spool/cron/
+VOLUME /var/lib/mysql /etc/my.cnf.d /root /var/spool/cron
 
+COPY clusterdown /tmp
+COPY clustersize /tmp
+COPY clusterstatus /tmp
 COPY galeramonitor /root/scripts/galera_monitor
 COPY checker /root/scripts/checker
 COPY server.cnf /etc/my.cnf.d/server.cnf
