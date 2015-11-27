@@ -1,0 +1,3 @@
+#*/5 * * * * /bin/sh /root/scripts/galera_monitor >/dev/null 2>&1
+#@hourly /bin/sh /root/scripts/checker >/dev/null 2>&1
+

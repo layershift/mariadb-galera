@@ -20,11 +20,10 @@ RUN mkdir /root/scripts
 VOLUME /var/lib/mysql /etc/my.cnf.d/ 
 
 COPY galeramonitor /root/scripts/galera_monitor
+COPY checker /root/scripts/checker
 COPY server.cnf /etc/my.cnf.d/server.cnf
 COPY iptables /etc/sysconfig/iptables
 COPY user.sql /tmp/user.sql
-COPY docker-entrypoint.sh /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
+COPY crontab /var/spool/cron/root
 
 EXPOSE 3306 4567 4444

@@ -4,11 +4,6 @@
 ## Where the alert should be sent to
 EMAIL="SENDTO"
 
-## Status files
-STATUS_FILE='/tmp/clusterstatus'
-SIZE_FILE='/tmp/clustersize'
-DOWN_FILE='/tmp/clusterdown'
-
 ## Check if MariaDB is running
 mysql_status=`/usr/sbin/service mysql status|awk {'print $1'}`
 
@@ -26,53 +21,33 @@ if [[ $mysql_status == "SUCCESS!" ]]; then
 ## Monitor cluster size state
   cluster_size=`mysql -e "show status like 'wsrep_cluster_size'" | tail -1 | awk {'print $2'}`
   if [ $cluster_size -eq 1 ]; then
-    if [ -s $SIZE_FILE ]; then
-      exit 0
-    else
-      echo "Cluster size: $cluster_size" > $EMAILMESSAGE
-      echo "======================================================" >> $EMAILMESSAGE
-      echo "Stopping mysql to prevent split-brain!" >> $EMAILMESSAGE
-      echo "======================================================" >> $EMAILMESSAGE
-      echo "Latest error: $error" >> $EMAILMESSAGE
-      /bin/mail -s "$SUBJECT1" "$EMAIL" < $EMAILMESSAGE
-      /etc/init.d/mysql stop                    # stop the mysql server to prevent split-brain
-      echo "sent" > $SIZE_FILE
-    fi
+    echo "Cluster size: $cluster_size" > $EMAILMESSAGE
+    echo "======================================================" >> $EMAILMESSAGE
+    echo "Stopping mysql to prevent split-brain!" >> $EMAILMESSAGE
+    echo "======================================================" >> $EMAILMESSAGE
+    echo "Latest error: $error" >> $EMAILMESSAGE
+    /bin/mail -s "$SUBJECT1" "$EMAIL" < $EMAILMESSAGE
+    /etc/init.d/mysql stop                    # stop the mysql server to prevent split-brain
   elif [ $cluster_size -eq 2 ]; then
-    if [ -s $SIZE_FILE ]; then
-      exit 0
-    else
-      echo "Cluster size: $cluster_size" > $EMAILMESSAGE
-      echo "======================================================" >> $EMAILMESSAGE
-      echo "Latest error: $error" >> $EMAILMESSAGE
-      /bin/mail -s "$SUBJECT2" "$EMAIL" < $EMAILMESSAGE
-      echo "sent" > $SIZE_FILE
-    fi
+    echo "Cluster size: $cluster_size" > $EMAILMESSAGE
+    echo "======================================================" >> $EMAILMESSAGE
+    echo "Latest error: $error" >> $EMAILMESSAGE
+    /bin/mail -s "$SUBJECT2" "$EMAIL" < $EMAILMESSAGE
   fi
 ## Monitor cluster status
   cluster_status=`mysql -e "show status like 'wsrep_cluster_status'" | tail -1 | awk {'print $2'}`
   if [[ $cluster_status != "Primary" ]]; then
-    if [ -s $STATUS_FILE ]; then
-      exit 0
-    else
-      echo "Please start here: http://galeracluster.com/documentation-webpages/quorumreset.html" > $EMAILMESSAGE
-      echo "Cluster size: $cluster_size" >> $EMAILMESSAGE
-      echo "Cluster size status: $cluster_status" >> $EMAILMESSAGE
-      echo "======================================================" >> $EMAILMESSAGE
-      echo "Latest error: $error" >> $EMAILMESSAGE
-      /bin/mail -s "$CLUSTER1" "$EMAIL" < $EMAILMESSAGE
-      echo "sent" > $STATUS_FILE
-    fi
+    echo "Please start here: http://galeracluster.com/documentation-webpages/quorumreset.html" > $EMAILMESSAGE
+    echo "Cluster size: $cluster_size" >> $EMAILMESSAGE
+    echo "Cluster size status: $cluster_status" >> $EMAILMESSAGE
+    echo "======================================================" >> $EMAILMESSAGE
+    echo "Latest error: $error" >> $EMAILMESSAGE
+    /bin/mail -s "$CLUSTER1" "$EMAIL" < $EMAILMESSAGE
   else
     exit 0
   fi
 elif [[ $mysql_status == "ERROR!" ]]; then
-  if [ -s $DOWN_FILE ]; then
-    exit 0
-  else
-    echo "Latest error: $error" > $EMAILMESSAGE
-    /bin/mail -s "$SUBJECT3" "$EMAIL" < $EMAILMESSAGE
-    echo "sent" > $DOWN_FILE
-  fi
+  echo "Latest error: $error" > $EMAILMESSAGE
+  /bin/mail -s "$SUBJECT3" "$EMAIL" < $EMAILMESSAGE
 fi
 
