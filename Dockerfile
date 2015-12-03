@@ -10,6 +10,7 @@ RUN rpm --import https://yum.mariadb.org/RPM-GPG-KEY-MariaDB \
     && yum -y install http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm \
     && yum -y install which net-tools rsync hostname bind-utils socat \
     && yum --enablerepo=mariadb -y install MariaDB-Galera-server MariaDB-client galera percona-xtrabackup.x86_64 \
+    && yum install perl-Digest-MD5 perl-Tk \
     && yum -y install m4 mailx sendmail sendmail-cf \
     && yum clean all
 
