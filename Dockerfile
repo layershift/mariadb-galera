@@ -10,7 +10,7 @@ RUN mkdir /root/scripts
 COPY ./checker ./galeramonitor /root/scripts/
 COPY ./server.cnf /etc/my.cnf.d/server.cnf
 COPY ./iptables /etc/sysconfig/iptables
-COPY ./user.sql /tmp/user.sql
+COPY ./user.sql ./clusterdown ./clustersize ./clusterstatus /tmp/
 COPY ./crontab /var/spool/cron/root
 
 EXPOSE 3306 4567 4444
