@@ -8,7 +8,7 @@ Docker image to be used with [Layershift Jelastic Paas](http://www.layershift.co
 Base Docker image
 ======
 
-[bbania/centos:galera](https://hub.docker.com/r/bbania/centos/)
+[bbania/centos:base](https://hub.docker.com/r/bbania/centos/)
 
 Installation
 ======
