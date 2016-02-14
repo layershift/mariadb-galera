@@ -1,3 +1,5 @@
+[![](https://badge.imagelayers.io/layershift/mariadb-galera:latest.svg)](https://imagelayers.io/?images=layershift/mariadb-galera:latest 'Get your own badge on imagelayers.io')
+
 MariaDB Galera Cluster Member
 ======
 
@@ -6,7 +8,7 @@ Docker image to be used with [Layershift Jelastic Paas](http://www.layershift.co
 Base Docker image
 ======
 
-Centos7:latest
+[bbania/centos:galera](https://hub.docker.com/r/bbania/centos/)
 
 Installation
 ======
