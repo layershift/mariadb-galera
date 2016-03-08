@@ -1,7 +1,7 @@
 FROM bbania/centos:base
 MAINTAINER "Layershift" <jelastic@layershift.com>
 
-COPY ./MariaDB.repo /etc/yum.repos.d/
+COPY ./configs/MariaDB.repo /etc/yum.repos.d/
 
 RUN yum install -q -y rsync bind-utils socat m4 mailx sendmail sendmail-cf
 RUN rpm --import https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
@@ -13,11 +13,11 @@ RUN /sbin/chkconfig mysql on && /sbin/chkconfig sendmail on
 
 RUN mkdir /root/scripts
 
-COPY ./checker ./galeramonitor /root/scripts/
-COPY ./server.cnf /etc/my.cnf.d/server.cnf
-COPY ./iptables /etc/sysconfig/iptables
-COPY ./user.sql ./clusterdown ./clustersize ./clusterstatus /tmp/
-COPY ./crontab /var/spool/cron/root
+COPY ./configs/checker ./configs/galeramonitor /root/scripts/
+COPY ./configs/server.cnf /etc/my.cnf.d/server.cnf
+COPY ./configs/iptables /etc/sysconfig/iptables
+COPY ./configs/user.sql ./configs/clusterdown ./configs/clustersize ./configs/clusterstatus /tmp/
+COPY ./configs/crontab /var/spool/cron/root
 
 VOLUME /var/lib/mysql /etc/my.cnf.d/ /root/ /var/spool/cron/
 
