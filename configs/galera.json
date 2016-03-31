@@ -104,7 +104,7 @@
 								"nodeId": "${nodes.sqldb[0].id}",
 								"user": "root",
 								"commands": [
-										"sed -i \"s/NODE1,NODE2/${nodes.sqldb[1].address}:4567,${nodes.sqldb[2].address}:4567/g\" /etc/my.cnf.d/server.cnf",
+										"sed -i \"s/NODE1,NODE2,NODE3/${nodes.sqldb[0].address}:4567,${nodes.sqldb[1].address}:4567,${nodes.sqldb[2].address}:4567/g\" /etc/my.cnf.d/server.cnf",
 										"sed -i \"s/THISNODE/${nodes.sqldb[0].address}/g\" /etc/my.cnf.d/server.cnf",
 										"sed -i \"s/THISNAME/galera-node-${nodes.sqldb[0].id}/g\" /etc/my.cnf.d/server.cnf",
 										"sed -i \"s/#wsrep/wsrep/g\" /etc/my.cnf.d/server.cnf"
@@ -113,7 +113,7 @@
 								"nodeId": "${nodes.sqldb[1].id}",
 								"user": "root",
 								"commands": [
-								        "sed -i \"s/NODE1,NODE2/${nodes.sqldb[0].address}:4567,${nodes.sqldb[2].address}:4567/g\" /etc/my.cnf.d/server.cnf",
+										"sed -i \"s/NODE1,NODE2,NODE3/${nodes.sqldb[0].address}:4567,${nodes.sqldb[1].address}:4567,${nodes.sqldb[2].address}:4567/g\" /etc/my.cnf.d/server.cnf",
 										"sed -i \"s/THISNODE/${nodes.sqldb[1].address}/g\" /etc/my.cnf.d/server.cnf",
 										"sed -i \"s/THISNAME/galera-node-${nodes.sqldb[1].id}/g\" /etc/my.cnf.d/server.cnf",
 										"sed -i \"s/#wsrep/wsrep/g\" /etc/my.cnf.d/server.cnf"
@@ -122,7 +122,7 @@
 								"nodeId": "${nodes.sqldb[2].id}",
 								"user": "root",
 								"commands": [
-								        "sed -i \"s/NODE1,NODE2/${nodes.sqldb[0].address}:4567,${nodes.sqldb[1].address}:4567/g\" /etc/my.cnf.d/server.cnf",
+										"sed -i \"s/NODE1,NODE2,NODE3/${nodes.sqldb[0].address}:4567,${nodes.sqldb[1].address}:4567,${nodes.sqldb[2].address}:4567/g\" /etc/my.cnf.d/server.cnf",
 										"sed -i \"s/THISNODE/${nodes.sqldb[2].address}/g\" /etc/my.cnf.d/server.cnf",
 										"sed -i \"s/THISNAME/galera-node-${nodes.sqldb[2].id}/g\" /etc/my.cnf.d/server.cnf",
 										"sed -i \"s/#wsrep/wsrep/g\" /etc/my.cnf.d/server.cnf"
