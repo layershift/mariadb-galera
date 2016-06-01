@@ -13,7 +13,7 @@ RUN /sbin/chkconfig mysql on && /sbin/chkconfig sendmail on
 
 RUN mkdir /root/scripts
 
-COPY ./configs/checker ./configs/galeramonitor /root/scripts/
+COPY ./configs/checker ./configs/galera_monitor /root/scripts/
 COPY ./configs/server.cnf /etc/my.cnf.d/server.cnf
 COPY ./configs/iptables /etc/sysconfig/iptables
 COPY ./configs/user.sql ./configs/clusterdown ./configs/clustersize ./configs/clusterstatus /tmp/
