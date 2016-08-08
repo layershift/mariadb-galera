@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for i in `find /tmp -type f -name "cluster*" -print0`; do
+  rm $i
+done
+
