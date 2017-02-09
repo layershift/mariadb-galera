@@ -12,6 +12,8 @@ RUN yum -q clean all
 RUN /sbin/chkconfig mysql on && /sbin/chkconfig sendmail on
 
 RUN mkdir /root/scripts
+RUN touch /var/log/mysql.log && \
+    chown mysql: /var/log/mysql.log
 
 COPY ./configs/checker ./configs/galera_monitor /root/scripts/
 COPY ./configs/server.cnf /etc/my.cnf.d/server.cnf
