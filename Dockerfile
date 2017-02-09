@@ -11,6 +11,8 @@ RUN yum install -y rsync bind-utils socat m4 mailx sendmail sendmail-cf && \
 
 RUN systemctl enable sendmail
 RUN mkdir /root/scripts
+RUN touch /var/log/mysql.log && \
+    chown mysql: /var/log/mysql.log
 
 COPY ./configs/checker ./configs/galeramonitor /root/scripts/
 COPY ./configs/server.cnf /etc/my.cnf.d/server.cnf
