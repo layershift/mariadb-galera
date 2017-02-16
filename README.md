@@ -18,3 +18,7 @@ Additional information
 ======
 
 jelastic@layershift.com
+
+# LICENSE
+
+Licensed under GNU LGPLv3
