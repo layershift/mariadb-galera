@@ -1,4 +1,3 @@
----
 jpsType: install
 application:
   name: MariaDB Galera Cluster (10.0)
