@@ -25,6 +25,8 @@ COPY ./configs/user.sql /tmp/
 COPY ./configs/mysqlchk /etc/xinetd.d/
 COPY ./configs/clustercheck /root/scripts/
 
+RUN chmod +x /root/scripts/clustercheck
+
 VOLUME /var/lib/mysql /etc/my.cnf.d/ /root/scripts /etc/xinetd.d
 
 EXPOSE 3306 4567 4444
