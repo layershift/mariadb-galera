@@ -115,14 +115,14 @@
 										"systemctl enable iptables.service 2>&1",
 										"service mysql start 2>&1",
 										"/usr/bin/mysqladmin -u root password \"${settings.root_pwd}\"",
-										"sed -i \"s/HAPROXY/${nodes.cp[0].address}/g\" /tmp/user.sql",
 										"sed -i \"s/NODE1/${nodes.sqldb[0].address}/g\" /tmp/user.sql",
 										"sed -i \"s/NODE2/${nodes.sqldb[1].address}/g\" /tmp/user.sql",
 										"sed -i \"s/NODE3/${nodes.sqldb[2].address}/g\" /tmp/user.sql",
-										"sed -i \"s/GOESHERE/${settings.root_pwd}/g\" /tmp/user.sql",
+										"sed -i \"s/GOESHERE1/${settings.root_pwd}/g\" /tmp/user.sql",
 										"sed -i \"s/GOESHERE2/${settings.app_user}/g\" /tmp/user.sql",
 										"sed -i \"s/GOESHERE3/${settings.app_pwd}/g\" /tmp/user.sql",
 										"sed -i \"s/GOESHERE4/${settings.database_name}/g\" /tmp/user.sql",
+										"sed -i \"s/GOESHERE5/${nodes.cp[0].address}/g\" /tmp/user.sql",
 										"mysql -uroot -p\"${settings.root_pwd}\" < /tmp/user.sql",
 										"service mysql stop 2>&1",
 										"sed -i \"s/PASSWORD/${settings.root_pwd}/g\" /etc/my.cnf.d/server.cnf"
@@ -218,6 +218,7 @@
 										"sed -i \"s/HOST3_IP/${nodes.sqldb[2].address}/g\" /etc/haproxy/haproxy.cfg",
 										"sed -i \"s/HAPASS/${nodes.cp[0].password}/g\" /etc/haproxy/scripts/alert.py",
 										"sed -i \"s/EMAIL_ADDRESS/${user.email}/g\" /etc/haproxy/scripts/alert.py",
+                                        "/bin/systemctl daemon-reload",
                                         "/bin/systemctl restart haproxy.service",
                                         "/bin/systemctl restart supervisord.service"
 								]
