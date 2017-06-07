@@ -180,12 +180,14 @@ application:
       
       Details:
           
-      * MySQL root password is: ${settings.root_pwd}
-      * Database user: ${settings.app_user}
-      * Database user password: ${settings.app_pwd}
-      * Application Database: ${settings.database_name}
+      * **MySQL root password is**: `${settings.root_pwd}`
+      * **Database user**: `${settings.app_user}`
+      * **Database user password**: `${settings.app_pwd}`
+      * **Application Database**: `${settings.database_name}`
       
-      Entry point for your application is HAProxy instance with ${nodes.cp[0].password} IP address - you should point your application to that IP.
+      * HAProxy IP: **${nodes.cp[0].address}**
+
+      Entry point for your application is [HAProxy](http://www.haproxy.org/) instance with ${nodes.cp[0].address} IP address - you should point your application to that IP when configuring your database.
       
       More about MariaDB Galera cluster: [https://mariadb.com/kb/en/mariadb/what-is-mariadb-galera-cluster/](https://mariadb.com/kb/en/mariadb/what-is-mariadb-galera-cluster/).
       
