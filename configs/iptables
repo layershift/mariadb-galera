@@ -5,8 +5,12 @@
 -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 -A INPUT -p icmp -j ACCEPT
 -A INPUT -i lo -j ACCEPT
--A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
--A INPUT -p tcp -m tcp --dport 3306 -m state --state NEW -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 3306 -j ACCEPT
+-A INPUT -s NODE1 -j ACCEPT
+-A INPUT -s NODE2 -j ACCEPT
+-A INPUT -s NODE3 -j ACCEPT
+-A INPUT -s NODE4 -j ACCEPT
 -A INPUT -j REJECT --reject-with icmp-host-prohibited
 -A FORWARD -j REJECT --reject-with icmp-host-prohibited
 COMMIT
