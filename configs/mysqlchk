@@ -7,7 +7,7 @@ service mysqlchk
         socket_type = stream
         port = 9200
         wait = no
-        user = nobody
+        user = root
         server = /root/scripts/clustercheck
         log_type = FILE /dev/null
         log_on_failure += USERID
