@@ -23,6 +23,7 @@ COPY ./configs/server.cnf /etc/my.cnf.d/server.cnf
 COPY ./configs/iptables /etc/sysconfig/iptables
 COPY ./configs/user.sql /tmp/
 COPY ./configs/mysqlchk /etc/xinetd.d/
+COPY ./configs/clustercheck /root/scripts/
 
 VOLUME /var/lib/mysql /etc/my.cnf.d/ /root/scripts /etc/xinetd.d
 

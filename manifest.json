@@ -57,15 +57,8 @@
 						"displayName": "Galera Proxy",
 						"docker": {
 							"nodeMission": "cp",
-							"image": "layershift/haproxy:dev",
-							"env": {
-								"LANG": "en_US.utf8",
-								"PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-							},
-							"volumes": [
-									"/etc/haproxy"
-							]
-						}
+							"image": "layershift/haproxy:dev"
+							}
 					}, {
 						"nodeType": "docker",
 						"count": 3,
@@ -74,20 +67,8 @@
 						"displayName": "MariaDB Galera Cluster",
 						"docker": {
 							"nodeMission": "sqldb",
-							"image": "layershift/mariadb-galera:dev",
-							"env": {
-								"MYSQL_ROOT_PASSWORD": "${settings.root_pwd}",
-								"LANG": "en_US.utf8",
-								"PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-							},
-							"volumes": [
-									"/var/lib/mysql",
-                                    "/root/scripts/",
-									"/etc/my.cnf",
-									"/etc/my.cnf.d",
-                                    "/etc/xinetd.d"
-							]
-						}
+							"image": "layershift/mariadb-galera:dev"
+                        }
 					}
 				]
 			}
