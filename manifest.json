@@ -8,7 +8,7 @@
       "apps/clusters"
     ],
     "homepage": "https://mariadb.com/",
-    "logo": "http://jps.layershift.com/mariadbgalera/mariadb.png",
+    "logo": "https://raw.githubusercontent.com/bubbl/mariadb-galera-ls/master/img/mariadb.png",
     "type": "docker",
     "version": "10.0",
     "description": "MariaDB 10.0 Galera Cluster is a synchronous multi-master cluster for MariaDB. It is available on Linux only, and only supports the XtraDB/InnoDB storage engines.    \nThis installation consists of three MariaDB cluster members in Docker containers as well as HAProxy to connecto from your application to the cluster.",
@@ -63,7 +63,7 @@
             "displayName": "Galera Proxy",
             "docker": {
               "nodeMission": "cp",
-              "image": "layershift/haproxy:dev"
+              "image": "layershift/haproxy:latest"
             }
           },
           {
@@ -74,7 +74,7 @@
             "displayName": "MariaDB Galera Cluster",
             "docker": {
               "nodeMission": "sqldb",
-              "image": "layershift/mariadb-galera:dev"
+              "image": "layershift/mariadb-galera:latest"
             }
           }
         ]
@@ -240,7 +240,7 @@
     ],
     "success": {
       "text": "Your MariaDB Galera Cluster has been deployed.\n\nYou can access the docker containers from our **[SSH Gateway](http://kb.layershift.com/jelastic-ssh-access)**.\n\nRoot password and connection details have been emailed to you.\n\nMore about MariaDB Galera cluster: [https://mariadb.com/kb/en/mariadb/what-is-mariadb-galera-cluster/](https://mariadb.com/kb/en/mariadb/what-is-mariadb-galera-cluster/).\nDocker on Jelastic: [https://jelastic.com/docker/](https://jelastic.com/docker/).\"\n",
-      "email": "Your MariaDB Galera Cluster has been deployed.\n\nYou can access the docker containers from our **[SSH Gateway](http://kb.layershift.com/jelastic-ssh-access)**.\n\nDetails:\n    \n* **MySQL root password is**: `${settings.root_pwd}`\n* **Database user**: `${settings.app_user}`\n* **Database user password**: `${settings.app_pwd}`\n* **Application Database**: `${settings.database_name}`\n\n* HAProxy IP: **${nodes.cp[0].address}**\n\nEntry point for your application is [HAProxy](http://www.haproxy.org/) instance with ${nodes.cp[0].address} IP address - you should point your application to that IP when configuring your database.\n\nMore about MariaDB Galera cluster: [https://mariadb.com/kb/en/mariadb/what-is-mariadb-galera-cluster/](https://mariadb.com/kb/en/mariadb/what-is-mariadb-galera-cluster/).\n\nDocker on Jelastic: [https://jelastic.com/docker/](https://jelastic.com/docker/)."
+      "email": "Your MariaDB Galera Cluster has been deployed.\n\nYou can access the docker containers from our **[SSH Gateway](http://kb.layershift.com/jelastic-ssh-access)**.     \n\nDetails:\n    \n* **MySQL root password is**: `${settings.root_pwd}`\n* **Database user**: `${settings.app_user}`\n* **Database user password**: `${settings.app_pwd}`\n* **Application Database**: `${settings.database_name}`\n\n* HAProxy IP for database connection: **${nodes.cp[0].address}**\n\n* HAProxy admin URL: ${nodes.cp[0].url}/stats\n* HAProxy admin access:\n- user: `haproxy`\n- password: `${nodes.cp[0].password}`\n\nEntry point for your application is [HAProxy](http://www.haproxy.org/) instance with        ${nodes.cp[0].address} IP address - you should point your application to that IP when configuring your database.\n\nMore about MariaDB Galera cluster: [https://mariadb.com/kb/en/   mariadb/what-is-mariadb-galera-cluster/](https://mariadb.com/kb/en/mariadb/what-is-mariadb-galera-cluster/).\n\nDocker on Jelastic: [https://jelastic.com/docker/](https://jelastic. com/docker/)."
     }
   }
 }
