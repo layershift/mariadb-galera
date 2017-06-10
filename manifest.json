@@ -8,7 +8,7 @@
       "apps/clusters"
     ],
     "homepage": "https://mariadb.com/",
-    "logo": "http://jps.layershift.com/mariadbgalera/mariadb.png",
+    "logo": "https://raw.githubusercontent.com/bubbl/mariadb-galera-ls/master/img/mariadb.png",
     "type": "docker",
     "version": "10.0",
     "description": "MariaDB 10.0 Galera Cluster is a synchronous multi-master cluster for MariaDB. It is available on Linux only, and only supports the XtraDB/InnoDB storage engines.    \nThis installation consists of three MariaDB cluster members in Docker containers as well as HAProxy to connecto from your application to the cluster.",
