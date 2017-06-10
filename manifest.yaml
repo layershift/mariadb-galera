@@ -6,7 +6,7 @@ application:
   - apps/clustered-dbs
   - apps/clusters
   homepage: https://mariadb.com/
-  logo: http://jps.layershift.com/mariadbgalera/mariadb.png
+  logo: https://raw.githubusercontent.com/bubbl/mariadb-galera-ls/master/img/mariadb.png
   type: docker
   version: '10.0'
   description: "MariaDB 10.0 Galera Cluster is a synchronous multi-master cluster
@@ -184,7 +184,11 @@ application:
       * **Database user password**: `${settings.app_pwd}`
       * **Application Database**: `${settings.database_name}`
       
-      * HAProxy IP: **${nodes.cp[0].address}**
+      * HAProxy IP for database connection: **${nodes.cp[0].address}**
+      * HAProxy admin URL: ${nodes.cp[0].url}/stats
+      * HAProxy access:
+          ** user: `haproxy`
+          ** password: `${nodes.cp[0].password}`
 
       Entry point for your application is [HAProxy](http://www.haproxy.org/) instance with ${nodes.cp[0].address} IP address - you should point your application to that IP when configuring your database.
       
