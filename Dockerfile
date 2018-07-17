@@ -3,11 +3,11 @@ MAINTAINER "Layershift" <jelastic@layershift.com>
 
 COPY ./configs/MariaDB.repo /etc/yum.repos.d/
 
-RUN yum install -q -y rsync bind-utils socat xinetd
+RUN yum install -y rsync bind-utils socat xinetd
 RUN rpm --import https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-RUN yum -q -y install http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
-RUN yum -q --enablerepo=mariadb -y install MariaDB-Galera-server MariaDB-client percona-xtrabackup.x86_64
-RUN yum -q clean all
+RUN yum -y install http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
+RUN yum -y install MariaDB-Galera-server MariaDB-client percona-xtrabackup.x86_64
+RUN yum clean all
 
 RUN echo "mysqlchk   9200/tcp" >> /etc/services
 
