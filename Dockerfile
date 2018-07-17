@@ -11,8 +11,7 @@ RUN yum -q clean all
 
 RUN echo "mysqlchk   9200/tcp" >> /etc/services
 
-RUN /sbin/chkconfig mysql on && \
-    systemctl enable xinetd
+RUN systemctl enable xinetd
 
 RUN touch /var/log/mysql.log && \
     chown mysql: /var/log/mysql.log
