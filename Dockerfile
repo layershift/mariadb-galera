@@ -13,8 +13,8 @@ RUN echo "mysqlchk   9200/tcp" >> /etc/services
 
 RUN systemctl enable xinetd
 
-RUN touch /var/log/mysql.log && \
-    chown mysql: /var/log/mysql.log
+#RUN touch /var/log/mysql.log && \
+#    chown mysql: /var/log/mysql.log
 
 RUN mkdir -p /root/scripts
 
