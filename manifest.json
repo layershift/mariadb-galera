@@ -136,7 +136,7 @@
                 "nodeId": "${nodes.sqldb[0].id}",
                 "user": "root",
                 "commands": [
-                  "sed -i \"s/NODE1,NODE2,NODE3/${nodes.sqldb[0].address}:4567,${nodes.sqldb[1].address}:4567,${nodes.sqldb[2].address}:4567/g\" /etc/my.cnf.d/server.cnf",
+                  "wget http://jps.layershift.com/mariadbgalera/server1.cnf -O /etc/my.cnf.d/server.cnf",
                   "sed -i \"s/THISNODE/${nodes.sqldb[0].address}/g\" /etc/my.cnf.d/server.cnf",
                   "sed -i \"s/THISNAME/galera-node-${nodes.sqldb[0].id}/g\" /etc/my.cnf.d/server.cnf",
                   "sed -i \"s/#wsrep/wsrep/g\" /etc/my.cnf.d/server.cnf"
@@ -175,7 +175,12 @@
                 "nodeId": "${nodes.sqldb[0].id}",
                 "user": "root",
                 "commands": [
-                  "service mysql stop 2>&1; service mysql start --wsrep-new-cluster 2>&1"
+                  "service mysql stop 2>&1; service mysql start --wsrep-new-cluster 2>&1",
+                  "wget http://jps.layershift.com/mariadbgalera/server2.cnf -O /etc/my.cnf.d/server.cnf",
+                  "sed -i \"s/NODE1,NODE2,NODE3/${nodes.sqldb[0].address}:4567,${nodes.sqldb[1].address}:4567,${nodes.sqldb[2].address}:4567/g\" /etc/my.cnf.d/server.cnf",
+                  "sed -i \"s/THISNODE/${nodes.sqldb[0].address}/g\" /etc/my.cnf.d/server.cnf",
+                  "sed -i \"s/THISNAME/galera-node-${nodes.sqldb[0].id}/g\" /etc/my.cnf.d/server.cnf",
+                  "sed -i \"s/#wsrep/wsrep/g\" /etc/my.cnf.d/server.cnf"
                 ]
               }
             ]
