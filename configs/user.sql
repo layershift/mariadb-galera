@@ -2,7 +2,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'galerareplicator'@'localhost' IDENTIFIED BY 'GOE
 GRANT ALL PRIVILEGES ON *.* TO 'galerareplicator'@'NODE1' IDENTIFIED BY 'GOESHERE1' WITH GRANT OPTION;
 GRANT ALL PRIVILEGES ON *.* TO 'galerareplicator'@'NODE2' IDENTIFIED BY 'GOESHERE1' WITH GRANT OPTION;
 GRANT ALL PRIVILEGES ON *.* TO 'galerareplicator'@'NODE3' IDENTIFIED BY 'GOESHERE1' WITH GRANT OPTION;
-INSERT INTO mysql.user (Host,User,ssl_cipher,x509_issuer,x509_subject) values ('GOESHERE5','haproxy_check','','','');
+INSERT INTO mysql.user(Host,User,ssl_cipher,x509_issuer,x509_subject,authentication_string) values('GOESHERE5','haproxy_check','','','','');
 CREATE DATABASE GOESHERE4;
 GRANT ALL PRIVILEGES ON GOESHERE4.* TO 'GOESHERE2'@'%' IDENTIFIED BY 'GOESHERE3';
 GRANT PROCESS ON *.* TO 'clustercheckuser'@'localhost' IDENTIFIED BY 'clustercheckpassword!';
