@@ -1,17 +1,17 @@
 {
   "jpsType": "install",
   "application": {
-    "name": "MariaDB Galera Cluster (10.0)",
-    "id": "mariadb-galera",
+    "name": "MariaDB Galera Cluster (10.2)",
+    "id": "mariadb-galera102",
     "categories": [
       "apps/clustered-dbs",
       "apps/clusters"
     ],
     "homepage": "https://mariadb.com/",
-    "logo": "https://raw.githubusercontent.com/layershift/mariadb-galera/master/img/mariadb.png",
+    "logo": "http://jps.layershift.com/mariadbgalera/mariadb.png",
     "type": "docker",
-    "version": "10.0",
-    "description": "MariaDB 10.0 Galera Cluster is a synchronous multi-master cluster for MariaDB. It is available on Linux only, and only supports the XtraDB/InnoDB storage engines.    \nThis installation consists of three MariaDB cluster members in Docker containers as well as HAProxy to connecto from your application to the cluster.",
+    "version": "10.2",
+    "description": "MariaDB 10.2 Galera Cluster is a synchronous multi-master cluster for MariaDB. It is available on Linux only, and only supports the XtraDB/InnoDB storage engines.    \nThis installation consists of three MariaDB cluster members in Docker containers as well as HAProxy to connecto from your application to the cluster.",
     "settings": {
       "fields": [
         {
@@ -74,7 +74,7 @@
             "displayName": "MariaDB Galera Cluster",
             "docker": {
               "nodeMission": "sqldb",
-              "image": "layershift/mariadb-galera:latest"
+              "image": "layershift/mariadb-galera:10.1"
             }
           }
         ]
@@ -118,6 +118,7 @@
                   "sed -i \"s/GOESHERE5/${nodes.cp[0].address}/g\" /tmp/user.sql",
                   "mysql -uroot -p\"${settings.root_pwd}\" < /tmp/user.sql",
                   "service mysql stop 2>&1",
+                  "killall -9 mysqld",
                   "sed -i \"s/PASSWORD/${settings.root_pwd}/g\" /etc/my.cnf.d/server.cnf"
                 ]
               }
@@ -134,10 +135,14 @@
                 "nodeId": "${nodes.sqldb[0].id}",
                 "user": "root",
                 "commands": [
-                  "sed -i \"s/NODE1,NODE2,NODE3/${nodes.sqldb[0].address}:4567,${nodes.sqldb[1].address}:4567,${nodes.sqldb[2].address}:4567/g\" /etc/my.cnf.d/server.cnf",
+                  "wget http://jps.layershift.com/mariadbgalera/server1.cnf -O /etc/my.cnf.d/server.cnf",
+                  "sed -i \"s/PASSWORD/${settings.root_pwd}/g\" /etc/my.cnf.d/server.cnf",
                   "sed -i \"s/THISNODE/${nodes.sqldb[0].address}/g\" /etc/my.cnf.d/server.cnf",
                   "sed -i \"s/THISNAME/galera-node-${nodes.sqldb[0].id}/g\" /etc/my.cnf.d/server.cnf",
-                  "sed -i \"s/#wsrep/wsrep/g\" /etc/my.cnf.d/server.cnf"
+                  "sed -i \"s/#wsrep/wsrep/g\" /etc/my.cnf.d/server.cnf",
+                  "service mysql stop 2>&1; killall -9 mysqld 2>&1",
+                  "echo wsrep_on=ON >> /etc/my.cnf.d/server.cnf",
+                  "service mysql start --wsrep-new-cluster 2>&1"
                 ]
               },
               {
@@ -173,7 +178,13 @@
                 "nodeId": "${nodes.sqldb[0].id}",
                 "user": "root",
                 "commands": [
-                  "service mysql stop 2>&1; service mysql start --wsrep-new-cluster 2>&1"
+                  "wget http://jps.layershift.com/mariadbgalera/server2.cnf -O /etc/my.cnf.d/server.cnf",
+                  "sed -i \"s/PASSWORD/${settings.root_pwd}/g\" /etc/my.cnf.d/server.cnf",
+                  "sed -i \"s/THISNODE/${nodes.sqldb[0].address}/g\" /etc/my.cnf.d/server.cnf",
+                  "sed -i \"s/THISNAME/galera-node-${nodes.sqldb[0].id}/g\" /etc/my.cnf.d/server.cnf",
+                  "sed -i \"s/NODE1,NODE2,NODE3/${nodes.sqldb[0].address}:4567,${nodes.sqldb[1].address}:4567,${nodes.sqldb[2].address}:4567/g\" /etc/my.cnf.d/server.cnf",
+                  "sed -i \"s/#wsrep/wsrep/g\" /etc/my.cnf.d/server.cnf",
+                  "echo wsrep_on=ON >> /etc/my.cnf.d/server.cnf"
                 ]
               }
             ]
@@ -189,7 +200,8 @@
                 "nodeId": "${nodes.sqldb[1].id}",
                 "user": "root",
                 "commands": [
-                  "service mysql stop 2>&1; service mysql start 2>&1"
+                  "echo wsrep_on=ON >> /etc/my.cnf.d/server.cnf",
+                  "service mysql stop 2>&1; killall -9 mysqld 2>&1; service mysql start 2>&1"
                 ]
               }
             ]
@@ -205,7 +217,8 @@
                 "nodeId": "${nodes.sqldb[2].id}",
                 "user": "root",
                 "commands": [
-                  "service mysql stop 2>&1; service mysql start 2>&1"
+                  "echo wsrep_on=ON >> /etc/my.cnf.d/server.cnf",
+                  "service mysql stop 2>&1; killall -9 mysqld 2>&1; service mysql start 2>&1"
                 ]
               }
             ]
@@ -240,7 +253,7 @@
     ],
     "success": {
       "text": "Your MariaDB Galera Cluster has been deployed.\n\nYou can access the docker containers from our **[SSH Gateway](http://kb.layershift.com/jelastic-ssh-access)**.\n\nRoot password and connection details have been emailed to you.\n\nMore about MariaDB Galera cluster: [https://mariadb.com/kb/en/mariadb/what-is-mariadb-galera-cluster/](https://mariadb.com/kb/en/mariadb/what-is-mariadb-galera-cluster/).\nDocker on Jelastic: [https://jelastic.com/docker/](https://jelastic.com/docker/).\"\n",
-      "email": "Your MariaDB Galera Cluster has been deployed.\n\nYou can access the docker containers from our **[SSH Gateway](http://kb.layershift.com/jelastic-ssh-access)**.     \n\nDetails:\n    \n* **MySQL root password is**: `${settings.root_pwd}`\n* **Database user**: `${settings.app_user}`\n* **Database user password**: `${settings.app_pwd}`\n* **Application Database**: `${settings.database_name}`\n\n* HAProxy IP for database connection: **${nodes.cp[0].address}**\n\n* HAProxy admin URL: ${nodes.cp[0].url}/stats\n* HAProxy admin access:\n- user: `haproxy`\n- password: `${nodes.cp[0].password}`\n\nEntry point for your application is [HAProxy](http://www.haproxy.org/) instance with        ${nodes.cp[0].address} IP address - you should point your application to that IP when configuring your database.\n\nMore about MariaDB Galera cluster: [https://mariadb.com/kb/en/   mariadb/what-is-mariadb-galera-cluster/](https://mariadb.com/kb/en/mariadb/what-is-mariadb-galera-cluster/).\n\nDocker on Jelastic: [https://jelastic.com/docker/](https://jelastic. com/docker/)."
+      "email": "Your MariaDB Galera Cluster has been deployed.\n\nYou can access the docker containers from our **[SSH Gateway](http://kb.layershift.com/jelastic-ssh-access)**.\n\nDetails:\n    \n* **MySQL root password is**: `${settings.root_pwd}`\n* **Database user**: `${settings.app_user}`\n* **Database user password**: `${settings.app_pwd}`\n* **Application Database**: `${settings.database_name}`\n\n* HAProxy IP: **${nodes.cp[0].address}**\n\nEntry point for your application is [HAProxy](http://www.haproxy.org/) instance with ${nodes.cp[0].address} IP address - you should point your application to that IP when configuring your database.\n\nMore about MariaDB Galera cluster: [https://mariadb.com/kb/en/mariadb/what-is-mariadb-galera-cluster/](https://mariadb.com/kb/en/mariadb/what-is-mariadb-galera-cluster/).\n\nDocker on Jelastic: [https://jelastic.com/docker/](https://jelastic.com/docker/)."
     }
   }
 }
