@@ -6,7 +6,7 @@ COPY ./configs/MariaDB.repo /etc/yum.repos.d/
 RUN yum update -y
 RUN yum install -q -y rsync bind-utils socat xinetd
 RUN rpm --import https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-RUN yum -q -y install http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
+RUN yum -q -y install https://www.percona.com/redir/downloads/percona-release/redhat/latest/percona-release-0.1-6.noarch.rpm 
 RUN yum -q --enablerepo=mariadb -y install MariaDB-Galera-server MariaDB-client galera percona-xtrabackup.x86_64
 RUN yum -q clean all
 
