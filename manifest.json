@@ -106,7 +106,7 @@
                   "sed -i \"s/NODE4/${nodes.cp[0].address}/g\" /etc/sysconfig/iptables",
                   "systemctl enable iptables.service 2>&1",
                   "systemctl restart iptables.service 2>&1",
-                  "systemctl enable mysql",
+                  "chkconfig mysql on",
                   "service mysql start 2>&1",
                   "/usr/bin/mysqladmin -u root password \"${settings.root_pwd}\"",
                   "sed -i \"s/NODE1/${nodes.sqldb[0].address}/g\" /tmp/user.sql",
