@@ -104,10 +104,8 @@
                   "sed -i \"s/NODE2/${nodes.sqldb[1].address}/g\" /etc/sysconfig/iptables",
                   "sed -i \"s/NODE3/${nodes.sqldb[2].address}/g\" /etc/sysconfig/iptables",
                   "sed -i \"s/NODE4/${nodes.cp[0].address}/g\" /etc/sysconfig/iptables",
-                  "touch /var/log/mysql.log && chown mysql:mysql /var/log/mysql.log",
                   "systemctl enable iptables.service 2>&1",
                   "systemctl restart iptables.service 2>&1",
-                  "systemctl enable mysql 2>&1",
                   "service mysql start 2>&1",
                   "/usr/bin/mysqladmin -u root password \"${settings.root_pwd}\"",
                   "sed -i \"s/NODE1/${nodes.sqldb[0].address}/g\" /tmp/user.sql",
@@ -120,6 +118,7 @@
                   "sed -i \"s/GOESHERE5/${nodes.cp[0].address}/g\" /tmp/user.sql",
                   "mysql -uroot -p\"${settings.root_pwd}\" < /tmp/user.sql",
                   "service mysql stop 2>&1",
+                  "killall -9 mysqld",
                   "sed -i \"s/PASSWORD/${settings.root_pwd}/g\" /etc/my.cnf.d/server.cnf"
                 ]
               }
@@ -137,10 +136,13 @@
                 "user": "root",
                 "commands": [
                   "wget http://jps.layershift.com/mariadbgalera/server1.cnf -O /etc/my.cnf.d/server.cnf",
+                  "sed -i \"s/PASSWORD/${settings.root_pwd}/g\" /etc/my.cnf.d/server.cnf",
                   "sed -i \"s/THISNODE/${nodes.sqldb[0].address}/g\" /etc/my.cnf.d/server.cnf",
                   "sed -i \"s/THISNAME/galera-node-${nodes.sqldb[0].id}/g\" /etc/my.cnf.d/server.cnf",
                   "sed -i \"s/#wsrep/wsrep/g\" /etc/my.cnf.d/server.cnf",
-                  "service mysql stop 2>&1; service mysql start --wsrep-new-cluster 2>&1"
+                  "service mysql stop 2>&1; killall -9 mysqld 2>&1",
+                  "echo wsrep_on=ON >> /etc/my.cnf.d/server.cnf",
+                  "service mysql start --wsrep-new-cluster 2>&1"
                 ]
               },
               {
@@ -177,10 +179,12 @@
                 "user": "root",
                 "commands": [
                   "wget http://jps.layershift.com/mariadbgalera/server2.cnf -O /etc/my.cnf.d/server.cnf",
-                  "sed -i \"s/NODE1,NODE2,NODE3/${nodes.sqldb[0].address}:4567,${nodes.sqldb[1].address}:4567,${nodes.sqldb[2].address}:4567/g\" /etc/my.cnf.d/server.cnf",
+                  "sed -i \"s/PASSWORD/${settings.root_pwd}/g\" /etc/my.cnf.d/server.cnf",
                   "sed -i \"s/THISNODE/${nodes.sqldb[0].address}/g\" /etc/my.cnf.d/server.cnf",
                   "sed -i \"s/THISNAME/galera-node-${nodes.sqldb[0].id}/g\" /etc/my.cnf.d/server.cnf",
-                  "sed -i \"s/#wsrep/wsrep/g\" /etc/my.cnf.d/server.cnf"
+                  "sed -i \"s/NODE1,NODE2,NODE3/${nodes.sqldb[0].address}:4567,${nodes.sqldb[1].address}:4567,${nodes.sqldb[2].address}:4567/g\" /etc/my.cnf.d/server.cnf",
+                  "sed -i \"s/#wsrep/wsrep/g\" /etc/my.cnf.d/server.cnf",
+                  "echo wsrep_on=ON >> /etc/my.cnf.d/server.cnf"
                 ]
               }
             ]
@@ -196,7 +200,8 @@
                 "nodeId": "${nodes.sqldb[1].id}",
                 "user": "root",
                 "commands": [
-                  "service mysql stop 2>&1; service mysql start 2>&1"
+                  "echo wsrep_on=ON >> /etc/my.cnf.d/server.cnf",
+                  "service mysql stop 2>&1; killall -9 mysqld 2>&1; service mysql start 2>&1"
                 ]
               }
             ]
@@ -212,7 +217,8 @@
                 "nodeId": "${nodes.sqldb[2].id}",
                 "user": "root",
                 "commands": [
-                  "service mysql stop 2>&1; service mysql start 2>&1"
+                  "echo wsrep_on=ON >> /etc/my.cnf.d/server.cnf",
+                  "service mysql stop 2>&1; killall -9 mysqld 2>&1; service mysql start 2>&1"
                 ]
               }
             ]
