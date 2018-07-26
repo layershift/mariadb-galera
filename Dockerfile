@@ -3,6 +3,7 @@ MAINTAINER "Layershift" <jelastic@layershift.com>
 
 COPY ./configs/MariaDB.repo /etc/yum.repos.d/
 
+RUN yum update -y
 RUN yum install -y rsync bind-utils socat xinetd
 RUN rpm --import https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 RUN yum -y install http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
