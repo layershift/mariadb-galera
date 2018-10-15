@@ -100,6 +100,7 @@
                 "nodeMission": "sqldb",
                 "user": "root",
                 "commands": [
+                  "yum reinstall -y openssh openssh-clients openssh-server",
                   "sed -i \"s/NODE1/${nodes.sqldb[0].address}/g\" /etc/sysconfig/iptables",
                   "sed -i \"s/NODE2/${nodes.sqldb[1].address}/g\" /etc/sysconfig/iptables",
                   "sed -i \"s/NODE3/${nodes.sqldb[2].address}/g\" /etc/sysconfig/iptables",
